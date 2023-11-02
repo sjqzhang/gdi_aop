@@ -19,7 +19,15 @@ func main() {
 		for _, ctrl := range ctrls {
 			if ctrl.Type().String() == "*"+info.Controller {
 				method := ctrl.MethodByName(info.Handler)
-				router.Handle(info.Method, info.Uri, middleware.BinderMiddleware(method))
+				var handlers []gin.HandlerFunc
+
+				if info.Middlewares != nil {
+					for _, m := range info.Middlewares {
+						handlers = append(handlers, middleware.GetMiddleware(m.Name)(m.Params))
+					}
+				}
+				handlers = append(handlers, middleware.BinderMiddleware(method))
+				router.Handle(info.Method, info.Uri, handlers...)
 			}
 		}
 	}

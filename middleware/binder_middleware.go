@@ -65,7 +65,7 @@ func BinderMiddleware(method reflect.Value) gin.HandlerFunc {
 			}
 			if results[0].Interface() != nil {
 
-				c.JSON(400, gin.H{"data": results[0].Interface(), "message": "ok"})
+				c.JSON(200, gin.H{"data": results[0].Interface(), "message": "ok"})
 				return
 			}
 		}
